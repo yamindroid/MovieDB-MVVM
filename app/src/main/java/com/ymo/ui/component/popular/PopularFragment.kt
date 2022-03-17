@@ -1,5 +1,6 @@
 package com.ymo.ui.component.popular
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.data.Resource
@@ -15,7 +15,7 @@ import com.ymo.data.Status
 import com.ymo.data.model.api.MovieItem
 import com.ymo.data.model.api.MovieResponse
 import com.ymo.databinding.FragmentPopularBinding
-import com.ymo.ui.MainActivity
+import com.ymo.ui.component.movie_detail.MovieDetailsActivity
 import com.ymo.utils.showSnackbar
 import com.ymo.utils.showToast
 import com.ymo.utils.toGone
@@ -98,6 +98,12 @@ class PopularFragment : Fragment(), TopRatedMoviesAdapter.OnClickedListener {
     }
 
     override fun onPosterClicked(movieItem: MovieItem) {
+        val intent = Intent(context, MovieDetailsActivity::class.java)
+        val bundle = Bundle().apply {
+            putInt(MOVIE_ID, movieItem.id)
+        }
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     override fun onFavoriteClicked(movieItem: MovieItem) {
@@ -118,6 +124,10 @@ class PopularFragment : Fragment(), TopRatedMoviesAdapter.OnClickedListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private val MOVIE_ID = "MOVIE_ID"
     }
 
 }

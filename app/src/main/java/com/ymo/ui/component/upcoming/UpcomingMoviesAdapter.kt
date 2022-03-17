@@ -53,7 +53,7 @@ class PopularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     ) {
         with(itemView)
         {
-            val url = "https://image.tmdb.org/t/p/w500/" + movieItem.posterPath
+            val url = "https://image.tmdb.org/t/p/original/" + movieItem.posterPath
             iv_poster.loadFromUrl(url)
             tv_title.text = movieItem.title
             tv_vote.text = resources.getString(R.string.voted_ui,movieItem.voteCount)
