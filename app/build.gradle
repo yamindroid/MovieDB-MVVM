@@ -1,0 +1,90 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'kotlin-platform-android'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs'
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    defaultConfig {
+        applicationId 'com.ymo'
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "com.task.CustomTestRunner"
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+    buildTypes {
+        release {
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/movie/\""
+            buildConfigField "String", "API_KEY", "\"0e7274f05c36db12cbe71d9ab0393d47\""
+            buildConfigField "String", "PREF_NAME", "\"pref_ymo\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/movie/\""
+            buildConfigField "String", "API_KEY", "\"0e7274f05c36db12cbe71d9ab0393d47\""
+            buildConfigField "String", "PREF_NAME", "\"pref_ymo\""
+        }
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //android support
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+
+    //View Pager 2
+    implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    //okhttp3
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpInterceptorVersion"
+
+    //glide image
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+
+    //dagger hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    annotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    //coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
+    //navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //room database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+}
