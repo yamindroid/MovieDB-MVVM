@@ -228,7 +228,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_vote"
+                android:id="@+id/tv_vote_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

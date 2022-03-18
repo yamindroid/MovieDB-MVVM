@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">MovieDB</string>
 
-    <!--    Navigation Menus-->
-    <string name="upcoming">Upcoming</string>
+    <!--    Tabs-->
+    <string name="now_playing">Now Playing</string>
     <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="upcoming">Upcoming</string>
+
+    <!--    Menus-->
+    <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+
 
     <!--    Error-->
     <string name="bad_request">Bad Request</string>

@@ -14,7 +14,8 @@
         android:theme="@style/ActionBarTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.component.movie_detail.MovieDetailsActivity"/>
+        <activity android:name=".ui.component.favorites.FavoritesActivity"/>
     </application>
 
 </manifest>

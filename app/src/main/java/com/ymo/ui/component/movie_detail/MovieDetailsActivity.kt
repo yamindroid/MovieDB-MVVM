@@ -102,7 +102,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding.tvDate.text =
             getLocalTimeFromUnix(movieDetail.releaseDate ?: "0000-00-00")
         binding.ivPoster.loadFromUrl(IMAGE_URL + movieDetail.posterPath)
-        binding.tvVote.text = resources.getString(R.string.voted_ui, movieDetail.voteCount)
+        binding.tvVoteCount.text = resources.getString(R.string.voted_ui, movieDetail.voteCount)
         binding.ivFavoriteMovie.setOnClickListener {
             if (isFav) {
                 removeFavorite()
