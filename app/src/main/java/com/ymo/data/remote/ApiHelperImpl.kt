@@ -12,9 +12,13 @@ constructor(private val apiService: ApiService) : ApiHelper {
         apiService.loadUpComingMovies(com.ymo.BuildConfig.API_KEY)
 
     override suspend fun loadTopRatedMovies(): MovieResponse =
-        apiService.loadTopRatedMovies(com.ymo.BuildConfig.API_KEY)
+        apiService.loadPopularMovies(com.ymo.BuildConfig.API_KEY)
 
     override suspend fun loadMovieDetails(movieId: Int): MovieDetail =
         apiService.loadMovieDetails(movieId, com.ymo.BuildConfig.API_KEY)
+
+    override suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse =
+        apiService.searchMoviesByQuery(query, page, com.ymo.BuildConfig.API_KEY)
+
 
 }

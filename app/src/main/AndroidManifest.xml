@@ -14,16 +14,19 @@
         android:theme="@style/ActionBarTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.component.movie_detail.MovieDetailsActivity"/>
-        <activity android:name=".ui.component.favorites.FavoritesActivity"/>
+        <activity android:name=".ui.component.movie_detail.MovieDetailsActivity" />
+        <activity android:name=".ui.component.favorites.FavoritesActivity" />
+        <activity
+            android:name=".ui.component.search.SearchActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

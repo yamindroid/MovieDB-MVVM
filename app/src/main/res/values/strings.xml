@@ -11,6 +11,8 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
 
+    <!--    Search-->
+    <string name="query_hint">Search by movie name</string>
 
     <!--    Error-->
     <string name="bad_request">Bad Request</string>

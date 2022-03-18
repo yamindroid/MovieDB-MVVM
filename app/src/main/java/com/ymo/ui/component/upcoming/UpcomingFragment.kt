@@ -23,15 +23,15 @@ import com.ymo.utils.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UpcomingFragment : Fragment(), UpcomingMoviesAdapter.OnClickedListener {
+class UpcomingFragment : Fragment(), MoviesAdapter.OnClickedListener {
 
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: UpcomingViewModel by viewModels()
 
-    private val favoriteMoviesAdapter: UpcomingMoviesAdapter by lazy {
-        UpcomingMoviesAdapter(this)
+    private val favoriteMoviesAdapter: MoviesAdapter by lazy {
+        MoviesAdapter(this)
     }
 
     override fun onCreateView(

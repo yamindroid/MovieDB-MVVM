@@ -12,6 +12,7 @@ import com.ymo.databinding.ActivityMainBinding
 import com.ymo.databinding.FragmentPopularBinding
 import com.ymo.ui.component.favorites.FavoritesActivity
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
+import com.ymo.ui.component.search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 //todo clean code
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_search -> {
-                Toast.makeText(applicationContext, "click on search", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, SearchActivity::class.java))
                 true
             }
             R.id.action_favorite -> {

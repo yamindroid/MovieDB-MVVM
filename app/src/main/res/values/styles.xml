@@ -15,4 +15,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Toolbar" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorHint">@color/gray_light</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:colorControlActivated">@color/white</item>
+    </style>
+
 </resources>

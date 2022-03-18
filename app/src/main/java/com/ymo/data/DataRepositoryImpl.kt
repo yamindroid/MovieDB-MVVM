@@ -21,6 +21,7 @@ class DataRepositoryImpl @Inject constructor(
     override suspend fun getFavoriteMovies(): List<FavoriteMovie> = dbHelper.getFavoriteMovies()
     override suspend fun addFavoriteMovie(favoriteMovie: FavoriteMovie) = dbHelper.addFavoriteMovie(favoriteMovie)
     override suspend fun deleteFavoriteMovieById(id: Int) = dbHelper.deleteFavoriteMovieById(id)
+    override suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse = apiHelper.searchMoviesByQuery(query, page)
 
     override fun setToken(token: String) = preferencesHelper.setToken(token)
     override fun getToken(): String = preferencesHelper.getToken()

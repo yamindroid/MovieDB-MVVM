@@ -16,6 +16,7 @@ import com.ymo.data.model.api.MovieItem
 import com.ymo.data.model.api.MovieResponse
 import com.ymo.databinding.FragmentPopularBinding
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
+import com.ymo.ui.component.upcoming.MoviesAdapter
 import com.ymo.utils.showSnackbar
 import com.ymo.utils.showToast
 import com.ymo.utils.toGone
@@ -23,15 +24,15 @@ import com.ymo.utils.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PopularFragment : Fragment(), TopRatedMoviesAdapter.OnClickedListener {
+class PopularFragment : Fragment(), MoviesAdapter.OnClickedListener {
 
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PopularViewModel by viewModels()
 
-    private val favoriteMoviesAdapter: TopRatedMoviesAdapter by lazy {
-        TopRatedMoviesAdapter(this)
+    private val moviesAdapter: MoviesAdapter by lazy {
+        MoviesAdapter(this)
     }
 
     override fun onCreateView(
@@ -51,9 +52,9 @@ class PopularFragment : Fragment(), TopRatedMoviesAdapter.OnClickedListener {
 
     private fun setupUIs() {
         viewModel.loadMovies()
-        binding.rvTopRatedMovies.apply {
+        binding.rvPopular.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = favoriteMoviesAdapter
+            adapter = moviesAdapter
         }
 
         binding.btnNoData.setOnClickListener {
@@ -87,7 +88,7 @@ class PopularFragment : Fragment(), TopRatedMoviesAdapter.OnClickedListener {
             Status.LOADING -> showLoadingView()
             Status.SUCCESS -> resource.data?.let {
                 showDataView(true)
-                favoriteMoviesAdapter.submitList(it.results)
+                moviesAdapter.submitList(it.results)
             }
             Status.ERROR -> {
                 showDataView(false)

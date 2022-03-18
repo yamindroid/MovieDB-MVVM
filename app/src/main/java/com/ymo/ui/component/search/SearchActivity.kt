@@ -1,23 +1,25 @@
-package com.ymo.ui.component.favorites
+package com.ymo.ui.component.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.ymo.R
 import com.ymo.data.Resource
 import com.ymo.data.Status
-import com.ymo.data.model.db.FavoriteMovie
-import com.ymo.databinding.ActivityFavoritesBinding
+import com.ymo.data.model.api.MovieItem
+import com.ymo.data.model.api.MovieResponse
+import com.ymo.databinding.ActivitySearchBinding
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
+import com.ymo.ui.component.upcoming.MoviesAdapter
 import com.ymo.utils.showSnackbar
 import com.ymo.utils.showToast
 import com.ymo.utils.toGone
@@ -25,67 +27,60 @@ import com.ymo.utils.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedListener {
+class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
 
-    private var _binding: ActivityFavoritesBinding? = null
+    private var _binding: ActivitySearchBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FavoritesViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels()
 
-    private val favoriteMoviesAdapter: FavoriteMoviesAdapter by lazy {
-        FavoriteMoviesAdapter(this)
+    private val favoriteMoviesAdapter: MoviesAdapter by lazy {
+        MoviesAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityFavoritesBinding.inflate(layoutInflater)
+        _binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUIs()
         setupObservers()
     }
 
     private fun setUpUIs() {
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        viewModel.loadFavoriteMovies()
-        binding.rvFavoriteMovies.apply {
+        binding.rvMovies.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = favoriteMoviesAdapter
         }
-        binding.btnNoData.setOnClickListener {
-            binding.loaderView.toVisible()
-            binding.btnNoData.toGone()
-            viewModel.loadFavoriteMovies()
-        }
+
     }
 
     private fun setupObservers() {
         viewModel.movieLiveData.observe(this, ::moviesHandler)
-        viewModel.removeFavoriteStatusLiveData.observe(this, ::removeFavStatusHandler)
+        viewModel.addFavoriteStatusLiveData.observe(this, ::addFavStatusHandler)
     }
 
-    private fun removeFavStatusHandler(resource: Resource<Int>) {
+    private fun addFavStatusHandler(resource: Resource<Unit>) {
         when (resource.status) {
             Status.LOADING -> showLoadingView()
             Status.SUCCESS -> resource.data?.let {
                 showDataView(true)
-                binding.root.showToast("Removed from Favorites", Toast.LENGTH_SHORT)
-                viewModel.loadFavoriteMovies()
+                binding.root.showToast("Added to Favorites", Toast.LENGTH_SHORT)
             }
             Status.ERROR -> {
-                showDataView(true)
+                showDataView(false)
                 resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
             }
         }
     }
 
-    private fun moviesHandler(resource: Resource<List<FavoriteMovie>>) {
+    private fun moviesHandler(resource: Resource<MovieResponse>) {
         when (resource.status) {
             Status.LOADING -> showLoadingView()
             Status.SUCCESS -> resource.data?.let {
-                if (it.isEmpty()) showDataView(false)
-                else showDataView(true)
-                favoriteMoviesAdapter.submitList(it)
-
+                showDataView(it.results?.isNotEmpty()!!)
+                favoriteMoviesAdapter.submitList(it.results)
             }
             Status.ERROR -> {
                 showDataView(false)
@@ -95,17 +90,17 @@ class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedLi
 
     }
 
-    override fun onPosterClicked(favoriteMovie: FavoriteMovie) {
+    override fun onPosterClicked(movieItem: MovieItem) {
         val intent = Intent(this, MovieDetailsActivity::class.java)
         val bundle = Bundle().apply {
-            putInt(MOVIE_ID, favoriteMovie.id)
+            putInt(MOVIE_ID, movieItem.id)
         }
         intent.putExtras(bundle)
         startActivity(intent)
     }
 
-    override fun onFavoriteClicked(favoriteMovie: FavoriteMovie) {
-        viewModel.removeFavoriteMovie(favoriteMovie)
+    override fun onFavoriteClicked(movieItem: MovieItem) {
+        viewModel.addFavoriteMovie(movieItem)
     }
 
     private fun showDataView(show: Boolean) {
@@ -116,6 +111,32 @@ class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedLi
     private fun showLoadingView() {
         binding.loaderView.toVisible()
         binding.btnNoData.toGone()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.isIconified = false
+        searchView.queryHint = getString(R.string.query_hint);
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    viewModel.searchMoviesByQuery(query, 1)
+                    searchView.clearFocus()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            finish()
+            false
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,6 +150,7 @@ class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedLi
         return super.onOptionsItemSelected(item)
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -137,5 +159,4 @@ class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedLi
     companion object {
         private val MOVIE_ID = "MOVIE_ID"
     }
-
 }

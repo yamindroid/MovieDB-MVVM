@@ -11,7 +11,7 @@ import com.ymo.utils.inflate
 import com.ymo.utils.loadFromUrl
 import kotlinx.android.synthetic.main.movie_card.view.*
 
-class UpcomingMoviesAdapter(
+class MoviesAdapter(
     private val listener: OnClickedListener
 ) : ListAdapter<MovieItem, PopularViewHolder>(
     object : DiffUtil.ItemCallback<MovieItem>() {
@@ -49,7 +49,7 @@ class UpcomingMoviesAdapter(
 class PopularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(
         movieItem: MovieItem,
-        listener: UpcomingMoviesAdapter.OnClickedListener
+        listener: MoviesAdapter.OnClickedListener
     ) {
         with(itemView)
         {
