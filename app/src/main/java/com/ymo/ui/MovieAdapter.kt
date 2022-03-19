@@ -1,4 +1,4 @@
-package com.ymo.ui.component.now_playing
+package com.ymo.ui
 
 import android.view.View
 import android.view.ViewGroup

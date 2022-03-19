@@ -3,55 +3,46 @@ package com.ymo.ui.component.popular
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import com.ymo.data.DataRepositoryHelper
 import com.ymo.data.Resource
 import com.ymo.data.model.api.MovieItem
-import com.ymo.data.model.api.MovieResponse
 import com.ymo.data.model.db.FavoriteMovie
 import com.ymo.data.model.error.NETWORK_ERROR
+import com.ymo.data.paging.PopularPagingSource
 import com.ymo.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
 class PopularViewModel @Inject constructor(
-    private val dataRepositoryHelper: DataRepositoryHelper
+    private val dataRepositoryHelper: DataRepositoryHelper,
+    private val pagingSource: PopularPagingSource
 ) : BaseViewModel() {
-    private val movies = MutableLiveData<Resource<MovieResponse>>()
-    val movieLiveData: LiveData<Resource<MovieResponse>> get() = movies
+    val movieLiveData: LiveData<PagingData<MovieItem>> get() = loadMovies()
+
+    private val noInternet = MutableLiveData<String>()
+    val noInternetLiveData: LiveData<String> get() = noInternet
 
     private val addFavoriteStatus = MutableLiveData<Resource<Unit>>()
     val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
 
-    fun loadMovies(page:Int) {
-        if (network.isConnected) {
-            viewModelScope.launch {
-                movies.postValue(Resource.loading(null))
-                try {
-                    movies.postValue(Resource.success(dataRepositoryHelper.loadPopularMovies(page)))
-                } catch (e: HttpException) {
-                    movies.postValue(Resource.error(errorManager.getHttpError(e).description, null))
-                } catch (e: Exception) {
-                    movies.postValue(Resource.error(e.localizedMessage ?: e.message!!, null))
-                }
-
-            }
-        } else movies.postValue(
-            Resource.error(
-                errorManager.getError(NETWORK_ERROR).description,
-                null
-            )
-        )
+    fun checkInternet() {
+        if (!network.isConnected)
+            noInternet.postValue(errorManager.getError(NETWORK_ERROR).description)
     }
 
+    private fun loadMovies(): LiveData<PagingData<MovieItem>> {
+        val result = Pager(PagingConfig(PAGE_SIZE)) { pagingSource }
+        return result.liveData.cachedIn(viewModelScope)
+    }
 
     fun addFavoriteMovie(movieItem: MovieItem) {
         viewModelScope.launch {
             addFavoriteStatus.postValue(Resource.loading(null))
             try {
-                addFavoriteStatus.value =  Resource.success(
+                addFavoriteStatus.value = Resource.success(
                     dataRepositoryHelper.addFavoriteMovie(
                         FavoriteMovie(
                             id = movieItem.id,
@@ -68,6 +59,10 @@ class PopularViewModel @Inject constructor(
             }
 
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 
 }

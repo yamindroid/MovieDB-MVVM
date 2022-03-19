@@ -2,7 +2,6 @@ package com.ymo.ui.component.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,16 +9,19 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.R
 import com.ymo.data.Resource
 import com.ymo.data.Status
 import com.ymo.data.model.api.MovieItem
-import com.ymo.data.model.api.MovieResponse
 import com.ymo.databinding.ActivitySearchBinding
+import com.ymo.ui.MovieAdapter
+import com.ymo.ui.MovieLoadStateAdapter
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
-import com.ymo.ui.component.upcoming.MoviesAdapter
 import com.ymo.utils.showSnackbar
 import com.ymo.utils.showToast
 import com.ymo.utils.toGone
@@ -27,15 +29,15 @@ import com.ymo.utils.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
+class SearchActivity : AppCompatActivity(), MovieAdapter.OnClickedListener {
 
     private var _binding: ActivitySearchBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SearchViewModel by viewModels()
 
-    private val favoriteMoviesAdapter: MoviesAdapter by lazy {
-        MoviesAdapter(this)
+    private val movieAdapter: MovieAdapter by lazy {
+        MovieAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +51,26 @@ class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
     private fun setUpUIs() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        viewModel.checkInternet()
         binding.rvMovies.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            adapter = favoriteMoviesAdapter
+            layoutManager = GridLayoutManager(context,2)
+            adapter = movieAdapter.withLoadStateHeaderAndFooter(
+                header = MovieLoadStateAdapter { movieAdapter.retry() },
+                footer = MovieLoadStateAdapter { movieAdapter.retry() }
+            )
+        }
+
+        binding.btnNoData.setOnClickListener {
+            viewModel.checkInternet()
+            movieAdapter.retry()
+        }
+
+        movieAdapter.addLoadStateListener { loadState ->
+            binding.apply {
+                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+                rvMovies.isVisible = loadState.source.refresh is LoadState.NotLoading
+                btnNoData.isVisible = loadState.source.refresh is LoadState.Error
+            }
         }
 
     }
@@ -59,6 +78,11 @@ class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
     private fun setupObservers() {
         viewModel.movieLiveData.observe(this, ::moviesHandler)
         viewModel.addFavoriteStatusLiveData.observe(this, ::addFavStatusHandler)
+        viewModel.noInternetLiveData.observe(this, ::noInternetHandler)
+    }
+
+    private fun noInternetHandler(noInternet: String) {
+        binding.root.showSnackbar(noInternet, Snackbar.LENGTH_LONG)
     }
 
     private fun addFavStatusHandler(resource: Resource<Unit>) {
@@ -75,19 +99,8 @@ class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
         }
     }
 
-    private fun moviesHandler(resource: Resource<MovieResponse>) {
-        when (resource.status) {
-            Status.LOADING -> showLoadingView()
-            Status.SUCCESS -> resource.data?.let {
-                showDataView(it.results?.isNotEmpty()!!)
-                favoriteMoviesAdapter.submitList(it.results)
-            }
-            Status.ERROR -> {
-                showDataView(false)
-                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
-            }
-        }
-
+    private fun moviesHandler(resource: PagingData<MovieItem>) {
+        movieAdapter.submitData(lifecycle, resource)
     }
 
     override fun onPosterClicked(movieItem: MovieItem) {
@@ -122,7 +135,7 @@ class SearchActivity : AppCompatActivity(), MoviesAdapter.OnClickedListener {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    viewModel.searchMoviesByQuery(query, 1)
+                    viewModel.searchMoviesByQuery(query)
                     searchView.clearFocus()
                 }
                 return true

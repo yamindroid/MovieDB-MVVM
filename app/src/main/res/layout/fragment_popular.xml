@@ -41,11 +41,5 @@
             android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_bottom" />
 
-        <ProgressBar
-            android:id="@+id/loader_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

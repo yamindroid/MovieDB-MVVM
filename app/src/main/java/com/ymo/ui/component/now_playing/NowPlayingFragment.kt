@@ -12,12 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.data.Resource
 import com.ymo.data.Status
 import com.ymo.data.model.api.MovieItem
 import com.ymo.databinding.FragmentNowPlayingBinding
+import com.ymo.ui.MovieAdapter
+import com.ymo.ui.MovieLoadStateAdapter
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
 import com.ymo.utils.showSnackbar
 import com.ymo.utils.showToast
@@ -119,11 +120,11 @@ class NowPlayingFragment : Fragment(), MovieAdapter.OnClickedListener {
 
     private fun showDataView(show: Boolean) {
         binding.btnNoData.visibility = if (show) View.GONE else View.VISIBLE
-        binding.loaderView.toGone()
+        binding.progressBar.toGone()
     }
 
     private fun showLoadingView() {
-        binding.loaderView.toVisible()
+        binding.progressBar.toVisible()
         binding.btnNoData.toGone()
     }
 
