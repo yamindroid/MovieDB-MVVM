@@ -34,7 +34,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_now_playing"
+            android:id="@+id/rv_top_rated"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
