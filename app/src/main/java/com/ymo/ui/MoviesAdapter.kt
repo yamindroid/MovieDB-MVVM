@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.movie_card.view.*
 
 class MoviesAdapter(
     private val listener: OnClickedListener
-) : ListAdapter<MovieItem, PopularViewHolder>(
+) : ListAdapter<MovieItem, MovieViewHolder>(
     object : DiffUtil.ItemCallback<MovieItem>() {
         override fun areItemsTheSame(
             oldItem: MovieItem,
@@ -32,11 +32,11 @@ class MoviesAdapter(
     }
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
-        return PopularViewHolder(parent.inflate(R.layout.movie_card))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        return MovieViewHolder(parent.inflate(R.layout.movie_card))
     }
 
-    override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position), listener)
     }
 
@@ -46,7 +46,7 @@ class MoviesAdapter(
     }
 }
 
-class PopularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(
         movieItem: MovieItem,
         listener: MoviesAdapter.OnClickedListener

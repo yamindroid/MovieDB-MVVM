@@ -1,5 +1,6 @@
 package com.ymo.ui.component.upcoming
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,6 @@ class UpcomingViewModel @Inject constructor(
 
     private val addFavoriteStatus = MutableLiveData<Resource<Unit>>()
     val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
-
 
     fun loadMovies(page:Int) {
         if (network.isConnected) {

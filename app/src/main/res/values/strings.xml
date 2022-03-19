@@ -19,13 +19,15 @@
     <string name="unauthorized_user">Unauthorised User</string>
     <string name="internal_server_error">Internal Server Error</string>
     <string name="connecting_server_error">Error Occur While Connecting Server</string>
-    <string name="no_data">No Data</string>
+    <string name="btn_no_data">No Data</string>
     <string name="search_error">there is no such recipe name</string>
     <string name="no_internet">Please check your internet connection</string>
     <string name="network_error">No Internet Connection</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >4 characters</string>
     <string name="invalid_username_and_password">please check your username and password</string>
+    <string name="retry">retry</string>
+    <string name="no_data">Results could not be loaded</string>
 
     <!--    Movie-->
     <string name="voted_ui">%1$d voted</string>
