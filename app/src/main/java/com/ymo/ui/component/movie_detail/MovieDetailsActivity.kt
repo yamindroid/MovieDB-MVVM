@@ -91,16 +91,11 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun bindDetailData(movieDetail: MovieDetail) {
         binding.movieTitle.text = movieDetail.title
-
         binding.overview.text = movieDetail.overview
         binding.orTitle.text = movieDetail.originalTitle
-
-        binding.orLan.text =
-            if (movieDetail.originalLanguage == "en") "English" else movieDetail.originalLanguage
-        binding.txRelease.text =
-            getLocalTimeFromUnix(movieDetail.releaseDate ?: "0000-00-00")
-        binding.tvDate.text =
-            getLocalTimeFromUnix(movieDetail.releaseDate ?: "0000-00-00")
+        binding.orLan.text = if (movieDetail.originalLanguage == "en") "English" else movieDetail.originalLanguage
+        binding.txRelease.text = if (movieDetail.releaseDate!!.isEmpty()) "0000-00-00" else getLocalTimeFromUnix( movieDetail.releaseDate)
+        binding.tvDate.text =if (movieDetail.releaseDate.isEmpty()) "0000-00-00" else getLocalTimeFromUnix( movieDetail.releaseDate)
         binding.ivPoster.loadFromUrl(IMAGE_URL + movieDetail.posterPath)
         binding.tvVoteCount.text = resources.getString(R.string.voted_ui, movieDetail.voteCount)
         binding.ivFavoriteMovie.setOnClickListener {

@@ -26,7 +26,7 @@ interface ApiService {
         @Query("api_key") apiKey: String
     ): MovieResponse
 
-    @GET("{movie_id}")
+    @GET("movie/{movie_id}")
     suspend fun loadMovieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
