@@ -26,12 +26,12 @@ class UpcomingViewModel @Inject constructor(
     val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
 
 
-    fun loadMovies() {
+    fun loadMovies(page:Int) {
         if (network.isConnected) {
             viewModelScope.launch {
                 movies.postValue(Resource.loading(null))
                 try {
-                    movies.postValue(Resource.success(dataRepositoryHelper.loadUpComingMovies()))
+                    movies.postValue(Resource.success(dataRepositoryHelper.loadUpComingMovies(page)))
                 } catch (e: HttpException) {
                     movies.postValue(Resource.error(errorManager.getHttpError(e).description, null))
                 } catch (e: Exception) {

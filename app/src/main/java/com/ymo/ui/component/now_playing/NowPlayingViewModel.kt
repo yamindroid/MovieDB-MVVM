@@ -1,4 +1,4 @@
-package com.ymo.ui.component.popular
+package com.ymo.ui.component.now_playing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class PopularViewModel @Inject constructor(
+class NowPlayingViewModel @Inject constructor(
     private val dataRepositoryHelper: DataRepositoryHelper
 ) : BaseViewModel() {
     private val movies = MutableLiveData<Resource<MovieResponse>>()
@@ -30,7 +30,7 @@ class PopularViewModel @Inject constructor(
             viewModelScope.launch {
                 movies.postValue(Resource.loading(null))
                 try {
-                    movies.postValue(Resource.success(dataRepositoryHelper.loadPopularMovies(page)))
+                    movies.postValue(Resource.success(dataRepositoryHelper.loadNowPlayingMovies(page)))
                 } catch (e: HttpException) {
                     movies.postValue(Resource.error(errorManager.getHttpError(e).description, null))
                 } catch (e: Exception) {

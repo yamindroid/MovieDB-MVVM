@@ -50,7 +50,7 @@ class UpcomingFragment : Fragment(), MoviesAdapter.OnClickedListener {
     }
 
     private fun setupUIs() {
-        viewModel.loadMovies()
+        viewModel.loadMovies(1)
         binding.rvUpcomingMovies.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = favoriteMoviesAdapter
@@ -59,7 +59,7 @@ class UpcomingFragment : Fragment(), MoviesAdapter.OnClickedListener {
         binding.btnNoData.setOnClickListener {
             binding.loaderView.toVisible()
             binding.btnNoData.toGone()
-            viewModel.loadMovies()
+            viewModel.loadMovies(1)
         }
 
     }

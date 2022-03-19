@@ -1,4 +1,4 @@
-package com.ymo.ui.component.popular
+package com.ymo.ui.component.now_playing
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.ymo.data.Resource
 import com.ymo.data.Status
 import com.ymo.data.model.api.MovieItem
 import com.ymo.data.model.api.MovieResponse
-import com.ymo.databinding.FragmentPopularBinding
+import com.ymo.databinding.FragmentNowPlayingBinding
 import com.ymo.ui.component.movie_detail.MovieDetailsActivity
 import com.ymo.ui.component.upcoming.MoviesAdapter
 import com.ymo.utils.showSnackbar
@@ -24,12 +24,12 @@ import com.ymo.utils.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PopularFragment : Fragment(), MoviesAdapter.OnClickedListener {
+class NowPlayingFragment : Fragment(), MoviesAdapter.OnClickedListener {
 
-    private var _binding: FragmentPopularBinding? = null
+    private var _binding: FragmentNowPlayingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PopularViewModel by viewModels()
+    private val viewModel: NowPlayingViewModel by viewModels()
 
     private val moviesAdapter: MoviesAdapter by lazy {
         MoviesAdapter(this)
@@ -40,7 +40,7 @@ class PopularFragment : Fragment(), MoviesAdapter.OnClickedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPopularBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentNowPlayingBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -52,7 +52,7 @@ class PopularFragment : Fragment(), MoviesAdapter.OnClickedListener {
 
     private fun setupUIs() {
         viewModel.loadMovies(1)
-        binding.rvPopular.apply {
+        binding.rvNowPlaying.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = moviesAdapter
         }

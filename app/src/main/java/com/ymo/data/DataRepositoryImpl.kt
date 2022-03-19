@@ -14,15 +14,34 @@ class DataRepositoryImpl @Inject constructor(
     private val dbHelper: DBHelper
 ) : DataRepositoryHelper {
 
-    override suspend fun loadUpComingMovies(): MovieResponse = apiHelper.loadUpComingMovies()
-    override suspend fun loadTopRatedMovies(): MovieResponse = apiHelper.loadTopRatedMovies()
-    override suspend fun loadMovieDetails(movieId: Int): MovieDetail = apiHelper.loadMovieDetails(movieId)
+    override suspend fun loadNowPlayingMovies(page: Int): MovieResponse =
+        apiHelper.loadNowPlayingMovies(page)
 
-    override suspend fun getFavoriteMovies(): List<FavoriteMovie> = dbHelper.getFavoriteMovies()
-    override suspend fun addFavoriteMovie(favoriteMovie: FavoriteMovie) = dbHelper.addFavoriteMovie(favoriteMovie)
-    override suspend fun deleteFavoriteMovieById(id: Int) = dbHelper.deleteFavoriteMovieById(id)
-    override suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse = apiHelper.searchMoviesByQuery(query, page)
+    override suspend fun loadPopularMovies(page: Int): MovieResponse =
+        apiHelper.loadPopularMovies(page)
+
+    override suspend fun loadTopRatedMovies(page: Int): MovieResponse =
+        apiHelper.loadTopRatedMovies(page)
+
+    override suspend fun loadUpComingMovies(page: Int): MovieResponse =
+        apiHelper.loadUpComingMovies(page)
+
+    override suspend fun loadMovieDetails(movieId: Int): MovieDetail =
+        apiHelper.loadMovieDetails(movieId)
+
+    override suspend fun getFavoriteMovies(): List<FavoriteMovie> =
+        dbHelper.getFavoriteMovies()
+
+    override suspend fun addFavoriteMovie(favoriteMovie: FavoriteMovie) =
+        dbHelper.addFavoriteMovie(favoriteMovie)
+
+    override suspend fun deleteFavoriteMovieById(id: Int) =
+        dbHelper.deleteFavoriteMovieById(id)
+
+    override suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse =
+        apiHelper.searchMoviesByQuery(query, page)
 
     override fun setToken(token: String) = preferencesHelper.setToken(token)
+
     override fun getToken(): String = preferencesHelper.getToken()
 }
