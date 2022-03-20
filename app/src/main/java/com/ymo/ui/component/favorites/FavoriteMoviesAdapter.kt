@@ -11,7 +11,6 @@ import com.ymo.utils.inflate
 import com.ymo.utils.loadFromUrl
 import kotlinx.android.synthetic.main.activity_movie_detail.view.*
 import kotlinx.android.synthetic.main.movie_card.view.*
-import kotlinx.android.synthetic.main.movie_card.view.iv_favorite_movie
 import kotlinx.android.synthetic.main.movie_card.view.iv_poster
 
 class FavoriteMoviesAdapter(
@@ -59,7 +58,7 @@ class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val url = "https://image.tmdb.org/t/p/original/" + favoriteMovie.posterPath
             iv_poster.loadFromUrl(url)
             tv_title.text = favoriteMovie.title
-            tv_vote.text = resources.getString(R.string.voted_ui,favoriteMovie.voteCount)
+            tv_vote.text = resources.getString(R.string.votes_ui,favoriteMovie.voteCount)
             iv_favorite_movie.setImageResource(R.drawable.ic_favorite_red_light)
             setOnClickListener {
                 listener.onPosterClicked(favoriteMovie)

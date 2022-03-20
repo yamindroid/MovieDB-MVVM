@@ -30,13 +30,14 @@
     <string name="no_data">Results could not be loaded</string>
 
     <!--    Movie-->
-    <string name="voted_ui">%1$d voted</string>
+    <string name="votes_ui">%1$d votes</string>
 
     <!--    Movie Detail-->
     <string name="movie_details">Movie Details</string>
     <string name="movie_desc">Movie Description</string>
     <string name="release_date">Release Date</string>
-    <string name="original_language">Original Language</string>
+    <string name="spoken_language">Spoken Language</string>
     <string name="original_title">Original Title</string>
     <string name="details">Details</string>
+    <string name="watch_movie">Watch Movie</string>
 </resources>

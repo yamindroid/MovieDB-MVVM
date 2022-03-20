@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="@dimen/spacing_medium"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:paddingBottom="@dimen/spacing_medium">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_poster"
@@ -15,7 +15,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" >
+        app:layout_constraintVertical_bias="0.0">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,33 +36,76 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textAppearance="?textAppearanceBody1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/cv_poster"
         app:layout_constraintStart_toStartOf="@+id/cv_poster"
         app:layout_constraintTop_toBottomOf="@+id/cv_poster"
         tools:text="The Good Doctor" />
 
-    <ImageView
-        android:id="@+id/iv_favorite_movie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/spacing_small"
-        android:paddingEnd="@dimen/spacing_small"
-        android:src="@drawable/ic_favorite_border_red_light"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_vote"
+        android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceCaption"
-        app:layout_constraintStart_toEndOf="@id/iv_favorite_movie"
-        app:layout_constraintBottom_toBottomOf="@id/iv_favorite_movie"
-        app:layout_constraintTop_toTopOf="@id/iv_favorite_movie"
-        tools:text="100 voted" />
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="Sep 25, 2017" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_genre">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_vote_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            tools:text="8.7" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center"
+            android:background="@color/gray_light" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textSize="15sp"
+            tools:text="100 voted" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_genre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="italic"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@id/cv_poster"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        tools:text="Drama,Fantasy" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

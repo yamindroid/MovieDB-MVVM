@@ -6,4 +6,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray_light">#d3d3d3</color>
     <color name="gray_very_light">#c9c9c9</color>
+    <color name="rate_color">#ffc600</color>
 </resources>

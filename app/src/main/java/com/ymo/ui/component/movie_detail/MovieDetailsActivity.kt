@@ -1,6 +1,7 @@
 package com.ymo.ui.component.movie_detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -92,12 +93,29 @@ class MovieDetailsActivity : AppCompatActivity() {
     private fun bindDetailData(movieDetail: MovieDetail) {
         binding.movieTitle.text = movieDetail.title
         binding.overview.text = movieDetail.overview
-        binding.orTitle.text = movieDetail.originalTitle
-        binding.orLan.text = if (movieDetail.originalLanguage == "en") "English" else movieDetail.originalLanguage
-        binding.txRelease.text = if (movieDetail.releaseDate!!.isEmpty()) "0000-00-00" else getLocalTimeFromUnix( movieDetail.releaseDate)
-        binding.tvDate.text =if (movieDetail.releaseDate.isEmpty()) "0000-00-00" else getLocalTimeFromUnix( movieDetail.releaseDate)
+        binding.txRelease.text = if (movieDetail.releaseDate?.isEmpty() == true) "00/00/0000" else movieDetail.releaseDate?.let {
+            getLocalTimeFromUnix(it)}
+        binding.coverPicture.loadFromUrl(IMAGE_URL + movieDetail.backdropPath)
         binding.ivPoster.loadFromUrl(IMAGE_URL + movieDetail.posterPath)
-        binding.tvVoteCount.text = resources.getString(R.string.voted_ui, movieDetail.voteCount)
+        binding.tvVoteCount.text = resources.getString(R.string.votes_ui, movieDetail.voteCount)
+        binding.tvVoteAverage.text = movieDetail.voteAverage.toString()
+        binding.tvStatus.text = movieDetail.status
+        binding.tvTagLine.text = movieDetail.tagline
+        var spokenLanguages = ""
+        movieDetail.spokenLanguages?.map {
+            spokenLanguages += it?.englishName + ",";
+        }
+        spokenLanguages =
+            if (spokenLanguages.length > 0) spokenLanguages.substring(0, spokenLanguages.length - 1) else ""
+        binding.tvSpokenLanguage.text = spokenLanguages
+        var genres= ""
+        movieDetail.genres?.map {
+            genres += it?.name + ",";
+        }
+        genres =
+            if (genres.length > 0) genres.substring(0, genres.length - 1) else ""
+        binding.tvGenre.text = genres
+
         binding.ivFavoriteMovie.setOnClickListener {
             if (isFav) {
                 removeFavorite()
