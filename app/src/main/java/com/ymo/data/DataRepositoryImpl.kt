@@ -1,7 +1,6 @@
 package com.ymo.data
 
 import com.ymo.data.local.db.DBHelper
-import com.ymo.data.local.prefs.PreferencesHelper
 import com.ymo.data.model.api.GenreResponse
 import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieDetail
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 class DataRepositoryImpl @Inject constructor(
     private val apiHelper: ApiHelper,
-    private val preferencesHelper: PreferencesHelper,
     private val dbHelper: DBHelper
 ) : DataRepositoryHelper {
 
@@ -77,8 +75,4 @@ class DataRepositoryImpl @Inject constructor(
             }
         }
     }
-
-    override fun setToken(token: String) = preferencesHelper.setToken(token)
-
-    override fun getToken(): String = preferencesHelper.getToken()
 }

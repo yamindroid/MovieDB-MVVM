@@ -2,7 +2,6 @@ package com.ymo.di
 
 import android.content.Context
 import com.ymo.BuildConfig
-import com.ymo.data.local.prefs.PreferencesHelper
 import com.ymo.data.remote.ApiHelper
 import com.ymo.data.remote.ApiHelperImpl
 import com.ymo.data.remote.service.ApiService
@@ -47,11 +46,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideInterceptor(preferencesHelper: PreferencesHelper): Interceptor {
+    fun provideInterceptor(): Interceptor {
         return Interceptor { chain: Interceptor.Chain ->
             val originRequest = chain.request()
             val builder: Request.Builder = originRequest.newBuilder()
-            builder.header("Authorization", "Bearer " + preferencesHelper?.getToken())
             val newRequest: Request = builder.build()
             chain.proceed(newRequest)
         }
