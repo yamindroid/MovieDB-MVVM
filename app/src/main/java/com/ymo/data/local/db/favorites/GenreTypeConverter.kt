@@ -13,7 +13,7 @@ class GenreTypeConverter {
     }
 
     @TypeConverter
-    fun getGenreList(list: String): List<GenresItem?>? {
+    fun getGenreList(list: String?): List<GenresItem?>? {
         return Gson().fromJson(
             list.toString(),
             object : TypeToken<List<GenresItem?>?>() {}.type

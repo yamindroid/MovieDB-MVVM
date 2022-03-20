@@ -94,9 +94,9 @@ class MovieDetailsActivity : AppCompatActivity() {
     private fun bindDetailData(movieDetail: MovieDetail) {
         binding.movieTitle.text = movieDetail.title
         binding.overview.text = movieDetail.overview
-        binding.txRelease.text = if (movieDetail.releaseDate?.isEmpty() == true) "00/00/0000" else movieDetail.releaseDate?.let {
+        binding.tvRelease.text = if (movieDetail.releaseDate?.isEmpty() == true) "00/00/0000" else movieDetail.releaseDate?.let {
             getLocalTimeFromUnix(it)}
-        binding.coverPicture.loadFromUrl(IMAGE_URL + movieDetail.backdropPath)
+        binding.ivBackDrop.loadFromUrl(IMAGE_URL + movieDetail.backdropPath)
         binding.ivPoster.loadFromUrl(IMAGE_URL + movieDetail.posterPath)
         binding.tvVoteCount.text = resources.getString(R.string.votes_ui, movieDetail.voteCount)
         binding.voteAverage.text = movieDetail.voteAverage.toString()

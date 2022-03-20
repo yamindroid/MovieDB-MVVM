@@ -260,7 +260,7 @@
                                     android:textStyle="bold" />
 
                                 <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/tx_release"
+                                    android:id="@+id/tv_release"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -274,6 +274,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_watch_movie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -290,7 +291,7 @@
                 android:layout_margin="@dimen/spacing_large">
 
                 <ImageView
-                    android:id="@+id/cover_picture"
+                    android:id="@+id/iv_back_drop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true" />

@@ -8,14 +8,14 @@ import com.ymo.data.model.api.GenresItem
 data class FavoriteMovie @JvmOverloads constructor(
     @PrimaryKey
     @ColumnInfo(name = "id") val id: Int,
-    @ColumnInfo(name = "poster_path") val posterPath: String,
-    @ColumnInfo(name = "release_date") val releaseDate: String,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "vote_average") val voteAverage: Double,
-    @ColumnInfo(name = "vote_count") val voteCount: Int,
+    @ColumnInfo(name = "poster_path") val posterPath: String? = null,
+    @ColumnInfo(name = "release_date") val releaseDate: String? = null,
+    @ColumnInfo(name = "title") val title: String? = null,
+    @ColumnInfo(name = "vote_average") val voteAverage: Double? = null,
+    @ColumnInfo(name = "vote_count") val voteCount: Int? = null,
     @ColumnInfo(name = "genre_ids")
     @TypeConverters(GenreTypeConverter::class)
-    val genres: List<GenresItem?>?
+    val genres: List<GenresItem?>? = null
 )
 
 
