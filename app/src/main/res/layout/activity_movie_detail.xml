@@ -229,7 +229,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="left|center"
                                     android:layout_weight="1"
-                                    android:text="@string/spoken_language"
+                                    android:text="@string/spoken_languages"
                                     android:textAppearance="?textAppearanceBody1"
                                     android:textStyle="bold" />
 

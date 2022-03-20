@@ -15,9 +15,6 @@ import com.ymo.ui.component.movie_detail.MovieDetailsActivity
 import com.ymo.ui.component.search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
-//todo clean code
-
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var moviesArray: Array<String>

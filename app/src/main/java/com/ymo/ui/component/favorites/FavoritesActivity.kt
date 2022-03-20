@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.ymo.R
 import com.ymo.data.Resource
 import com.ymo.data.Status
 import com.ymo.data.model.db.FavoriteMovie
@@ -45,6 +46,7 @@ class FavoritesActivity : AppCompatActivity(), FavoriteMoviesAdapter.OnClickedLi
     }
 
     private fun setUpUIs() {
+        supportActionBar?.title = getString(R.string.favorites)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel.loadFavoriteMovies()
         binding.rvFavoriteMovies.apply {

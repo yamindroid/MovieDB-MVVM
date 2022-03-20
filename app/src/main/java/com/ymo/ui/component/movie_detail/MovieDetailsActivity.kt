@@ -36,6 +36,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun setUpUIs() {
+        supportActionBar?.title = getString(R.string.movie_details )
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val movieId = intent?.extras?.getInt(MOVIE_ID) ?: return
         viewModel.loadMovieDetail(movieId)
