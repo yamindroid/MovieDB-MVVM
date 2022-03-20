@@ -98,7 +98,7 @@
 
 
                                 <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/tv_vote_average"
+                                    android:id="@+id/vote_average"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?attr/textAppearanceCaption"
@@ -133,7 +133,7 @@
                                 android:gravity="center">
 
                                 <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/tv_genre"
+                                    android:id="@+id/genre"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:textSize="13sp"

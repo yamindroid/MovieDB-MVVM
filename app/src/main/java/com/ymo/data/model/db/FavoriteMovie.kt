@@ -1,8 +1,8 @@
 package com.ymo.data.model.db
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.ymo.data.local.db.favorites.GenreTypeConverter
+import com.ymo.data.model.api.GenresItem
 
 @Entity(tableName = "favorite")
 data class FavoriteMovie @JvmOverloads constructor(
@@ -13,4 +13,9 @@ data class FavoriteMovie @JvmOverloads constructor(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "vote_average") val voteAverage: Double,
     @ColumnInfo(name = "vote_count") val voteCount: Int,
+    @ColumnInfo(name = "genre_ids")
+    @TypeConverters(GenreTypeConverter::class)
+    val genres: List<GenresItem?>?
 )
+
+

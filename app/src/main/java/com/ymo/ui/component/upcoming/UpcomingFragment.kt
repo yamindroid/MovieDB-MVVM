@@ -80,27 +80,12 @@ class UpcomingFragment : Fragment(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.addFavoriteStatusLiveData.observe(viewLifecycleOwner, ::addFavStatusHandler)
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, ::noInternetHandler)
         viewModel.genresLiveData.observe(viewLifecycleOwner, ::genresHandler)
     }
 
     private fun noInternetHandler(noInternet: String) {
         binding.root.showSnackbar(noInternet, Snackbar.LENGTH_LONG)
-    }
-
-    private fun addFavStatusHandler(resource: Resource<Unit>) {
-        when (resource.status) {
-            Status.LOADING -> showLoadingView()
-            Status.SUCCESS -> resource.data?.let {
-                showDataView(true)
-                binding.root.showToast("Added to Favorites", Toast.LENGTH_SHORT)
-            }
-            Status.ERROR -> {
-                showDataView(true)
-                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
-            }
-        }
     }
 
     private fun genresHandler(resource: Resource<List<GenresItem>>) {
@@ -129,10 +114,6 @@ class UpcomingFragment : Fragment(), MovieAdapter.OnClickedListener {
         }
         intent.putExtras(bundle)
         startActivity(intent)
-    }
-
-    override fun onFavoriteClicked(movieItem: MovieItem) {
-        viewModel.addFavoriteMovie(movieItem)
     }
 
     private fun showDataView(show: Boolean) {

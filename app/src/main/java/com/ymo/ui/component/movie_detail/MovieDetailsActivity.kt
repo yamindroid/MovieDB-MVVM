@@ -98,7 +98,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding.coverPicture.loadFromUrl(IMAGE_URL + movieDetail.backdropPath)
         binding.ivPoster.loadFromUrl(IMAGE_URL + movieDetail.posterPath)
         binding.tvVoteCount.text = resources.getString(R.string.votes_ui, movieDetail.voteCount)
-        binding.tvVoteAverage.text = movieDetail.voteAverage.toString()
+        binding.voteAverage.text = movieDetail.voteAverage.toString()
         binding.tvStatus.text = movieDetail.status
         binding.tvTagLine.text = movieDetail.tagline
         var spokenLanguages = ""
@@ -114,7 +114,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
         genres =
             if (genres.length > 0) genres.substring(0, genres.length - 1) else ""
-        binding.tvGenre.text = genres
+        binding.genre.text = genres
 
         binding.ivFavoriteMovie.setOnClickListener {
             if (isFav) {

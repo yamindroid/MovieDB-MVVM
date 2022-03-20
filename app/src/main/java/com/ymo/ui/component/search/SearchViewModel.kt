@@ -31,8 +31,6 @@ class SearchViewModel @Inject constructor(
     private val genres = MutableLiveData<Resource<List<GenresItem>>>()
     val genresLiveData: LiveData<Resource<List<GenresItem>>> get() = genres
 
-    private val addFavoriteStatus = MutableLiveData<Resource<Unit>>()
-    val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
 
     init {
         getGenres()
@@ -63,30 +61,6 @@ class SearchViewModel @Inject constructor(
 
     fun searchMoviesByQuery(query: String) {
         currentQuery.value = query
-    }
-
-
-    fun addFavoriteMovie(movieItem: MovieItem) {
-        viewModelScope.launch {
-            addFavoriteStatus.postValue(Resource.loading(null))
-            try {
-                addFavoriteStatus.value = Resource.success(
-                    dataRepositoryHelper.addFavoriteMovie(
-                        FavoriteMovie(
-                            id = movieItem.id,
-                            posterPath = movieItem.posterPath,
-                            releaseDate = movieItem.releaseDate ?: "0000-00-00",
-                            title = movieItem.title,
-                            voteAverage = movieItem.voteAverage,
-                            voteCount = movieItem.voteCount
-                        )
-                    )
-                )
-            } catch (e: Exception) {
-                addFavoriteStatus.postValue(Resource.error(e.localizedMessage ?: e.message!!, null))
-            }
-
-        }
     }
 
 }

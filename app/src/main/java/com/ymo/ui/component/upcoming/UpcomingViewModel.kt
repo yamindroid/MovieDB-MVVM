@@ -30,9 +30,6 @@ class UpcomingViewModel @Inject constructor(
     val genresLiveData: LiveData<Resource<List<GenresItem>>> get() = genres
 
 
-    private val addFavoriteStatus = MutableLiveData<Resource<Unit>>()
-    val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
-
     init {
         getGenres()
     }
@@ -57,30 +54,6 @@ class UpcomingViewModel @Inject constructor(
     private fun loadMovies(): LiveData<PagingData<MovieItem>> {
         val result = Pager(PagingConfig(PAGE_SIZE)) { pagingSource }
         return result.liveData.cachedIn(viewModelScope)
-    }
-
-
-    fun addFavoriteMovie(movieItem: MovieItem) {
-        viewModelScope.launch {
-            addFavoriteStatus.postValue(Resource.loading(null))
-            try {
-                addFavoriteStatus.value = Resource.success(
-                    dataRepositoryHelper.addFavoriteMovie(
-                        FavoriteMovie(
-                            id = movieItem.id,
-                            posterPath = movieItem.posterPath,
-                            releaseDate = movieItem.releaseDate ?: "0000-00-00",
-                            title = movieItem.title,
-                            voteAverage = movieItem.voteAverage,
-                            voteCount = movieItem.voteCount
-                        )
-                    )
-                )
-            } catch (e: Exception) {
-                addFavoriteStatus.postValue(Resource.error(e.localizedMessage ?: e.message!!, null))
-            }
-
-        }
     }
 
     companion object {

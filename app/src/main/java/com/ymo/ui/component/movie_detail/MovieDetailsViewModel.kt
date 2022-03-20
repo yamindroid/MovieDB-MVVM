@@ -72,7 +72,8 @@ class MovieDetailsViewModel @Inject constructor(
                             releaseDate = movieDetail.releaseDate ?: "0000-00-00",
                             title = movieDetail.title,
                             voteAverage = movieDetail.voteAverage,
-                            voteCount = movieDetail.voteCount
+                            voteCount = movieDetail.voteCount,
+                            genres = movieDetail.genres
                         )
                     )
                 )

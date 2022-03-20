@@ -33,7 +33,6 @@ class MovieAdapter(
 
     interface OnClickedListener {
         fun onPosterClicked(movieItem: MovieItem)
-        fun onFavoriteClicked(movieItem: MovieItem)//todo remove later
     }
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

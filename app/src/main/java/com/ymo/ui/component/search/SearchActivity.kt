@@ -77,27 +77,12 @@ class SearchActivity : AppCompatActivity(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.addFavoriteStatusLiveData.observe(this, ::addFavStatusHandler)
         viewModel.noInternetLiveData.observe(this, ::noInternetHandler)
         viewModel.genresLiveData.observe(this, ::genresHandler)
     }
 
     private fun noInternetHandler(noInternet: String) {
         binding.root.showSnackbar(noInternet, Snackbar.LENGTH_LONG)
-    }
-
-    private fun addFavStatusHandler(resource: Resource<Unit>) {
-        when (resource.status) {
-            Status.LOADING -> showLoadingView()
-            Status.SUCCESS -> resource.data?.let {
-                showDataView(true)
-                binding.root.showToast("Added to Favorites", Toast.LENGTH_SHORT)
-            }
-            Status.ERROR -> {
-                showDataView(false)
-                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
-            }
-        }
     }
 
     private fun moviesHandler(resource: PagingData<MovieItem>) {
@@ -128,9 +113,6 @@ class SearchActivity : AppCompatActivity(), MovieAdapter.OnClickedListener {
         startActivity(intent)
     }
 
-    override fun onFavoriteClicked(movieItem: MovieItem) {
-        viewModel.addFavoriteMovie(movieItem)
-    }
 
     private fun showDataView(show: Boolean) {
         binding.btnNoData.visibility = if (show) View.GONE else View.VISIBLE
