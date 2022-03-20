@@ -1,5 +1,6 @@
 package com.ymo.data.remote.service
 
+import com.ymo.data.model.api.GenreResponse
 import com.ymo.data.model.api.MovieDetail
 import com.ymo.data.model.api.MovieResponse
 import retrofit2.http.GET
@@ -44,4 +45,7 @@ interface ApiService {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): MovieDetail
+
+    @GET("genre/movie/list")
+    suspend fun loadGenres(@Query("api_key") apiKey: String): GenreResponse
 }

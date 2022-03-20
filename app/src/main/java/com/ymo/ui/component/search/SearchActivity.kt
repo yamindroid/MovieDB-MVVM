@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ymo.R
 import com.ymo.data.Resource
 import com.ymo.data.Status
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
 import com.ymo.databinding.ActivitySearchBinding
 import com.ymo.ui.MovieAdapter
@@ -76,9 +77,9 @@ class SearchActivity : AppCompatActivity(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.movieLiveData.observe(this, ::moviesHandler)
         viewModel.addFavoriteStatusLiveData.observe(this, ::addFavStatusHandler)
         viewModel.noInternetLiveData.observe(this, ::noInternetHandler)
+        viewModel.genresLiveData.observe(this, ::genresHandler)
     }
 
     private fun noInternetHandler(noInternet: String) {
@@ -101,6 +102,21 @@ class SearchActivity : AppCompatActivity(), MovieAdapter.OnClickedListener {
 
     private fun moviesHandler(resource: PagingData<MovieItem>) {
         movieAdapter.submitData(lifecycle, resource)
+    }
+
+    private fun genresHandler(resource: Resource<List<GenresItem>>) {
+        when (resource.status) {
+            Status.LOADING -> showLoadingView()
+            Status.SUCCESS -> resource.data?.let {
+                showDataView(resource.data.isNotEmpty())
+                movieAdapter.setGenres(resource.data)
+                viewModel.movieLiveData.observe(this, ::moviesHandler)
+            }
+            Status.ERROR -> {
+                showDataView(false)
+                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
+            }
+        }
     }
 
     override fun onPosterClicked(movieItem: MovieItem) {

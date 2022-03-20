@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.ymo.data.DataRepositoryHelper
 import com.ymo.data.Resource
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
 import com.ymo.data.model.db.FavoriteMovie
 import com.ymo.data.model.error.NETWORK_ERROR
@@ -27,18 +28,39 @@ class SearchViewModel @Inject constructor(
     private val noInternet = MutableLiveData<String>()
     val noInternetLiveData: LiveData<String> get() = noInternet
 
+    private val genres = MutableLiveData<Resource<List<GenresItem>>>()
+    val genresLiveData: LiveData<Resource<List<GenresItem>>> get() = genres
+
     private val addFavoriteStatus = MutableLiveData<Resource<Unit>>()
     val addFavoriteStatusLiveData: LiveData<Resource<Unit>> get() = addFavoriteStatus
 
+    init {
+        getGenres()
+    }
+
+    fun getGenres() {
+        viewModelScope.launch {
+            genres.postValue(Resource.loading(null))
+            try {
+                genres.postValue(Resource.success(dataRepositoryHelper.getGenres()))
+            } catch (e: Exception) {
+                genres.postValue(Resource.error(e.localizedMessage ?: e.message!!, null))
+            }
+
+        }
+    }
 
     fun checkInternet() {
         if (!network.isConnected)
             noInternet.postValue(errorManager.getError(NETWORK_ERROR).description)
     }
+
     val movieLiveData = currentQuery.switchMap { queryString ->
-        val result = Pager(PagingConfig(PAGE_SIZE)) { SearchPagingSource(dataRepositoryHelper,queryString) }
-       result.liveData.cachedIn(viewModelScope)
+        val result =
+            Pager(PagingConfig(PAGE_SIZE)) { SearchPagingSource(dataRepositoryHelper, queryString) }
+        result.liveData.cachedIn(viewModelScope)
     }
+
     fun searchMoviesByQuery(query: String) {
         currentQuery.value = query
     }
@@ -48,18 +70,18 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             addFavoriteStatus.postValue(Resource.loading(null))
             try {
-                addFavoriteStatus.value =  Resource.success(
-                        dataRepositoryHelper.addFavoriteMovie(
-                            FavoriteMovie(
-                                id = movieItem.id,
-                                posterPath = movieItem.posterPath,
-                                releaseDate = movieItem.releaseDate ?: "0000-00-00",
-                                title = movieItem.title,
-                                voteAverage = movieItem.voteAverage,
-                                voteCount = movieItem.voteCount
-                            )
+                addFavoriteStatus.value = Resource.success(
+                    dataRepositoryHelper.addFavoriteMovie(
+                        FavoriteMovie(
+                            id = movieItem.id,
+                            posterPath = movieItem.posterPath,
+                            releaseDate = movieItem.releaseDate ?: "0000-00-00",
+                            title = movieItem.title,
+                            voteAverage = movieItem.voteAverage,
+                            voteCount = movieItem.voteCount
                         )
                     )
+                )
             } catch (e: Exception) {
                 addFavoriteStatus.postValue(Resource.error(e.localizedMessage ?: e.message!!, null))
             }

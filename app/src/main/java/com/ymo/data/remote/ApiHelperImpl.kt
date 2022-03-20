@@ -1,6 +1,7 @@
 package com.ymo.data.remote
 
 import com.ymo.BuildConfig
+import com.ymo.data.model.api.GenreResponse
 import com.ymo.data.model.api.MovieDetail
 import com.ymo.data.model.api.MovieResponse
 import com.ymo.data.remote.service.ApiService
@@ -26,6 +27,10 @@ constructor(private val apiService: ApiService) : ApiHelper {
 
     override suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse =
         apiService.searchMoviesByQuery(query, page, BuildConfig.API_KEY)
+
+    override suspend fun loadGenres(): GenreResponse =
+        apiService.loadGenres(BuildConfig.API_KEY)
+
 
 
 }

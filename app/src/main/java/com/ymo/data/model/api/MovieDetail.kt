@@ -1,5 +1,7 @@
 package com.ymo.data.model.api
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetail(
@@ -109,12 +111,13 @@ data class ProductionCompaniesItem(
 	@field:SerializedName("origin_country")
 	val originCountry: String? = null
 )
-
+@Entity(tableName = "genre")
 data class GenresItem(
 
 	@field:SerializedName("name")
 	val name: String? = null,
 
+	@PrimaryKey
 	@field:SerializedName("id")
 	val id: Int? = null
 )

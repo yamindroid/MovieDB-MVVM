@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.data.Resource
 import com.ymo.data.Status
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
 import com.ymo.databinding.FragmentNowPlayingBinding
 import com.ymo.ui.MovieAdapter
@@ -56,7 +57,7 @@ class NowPlayingFragment : Fragment(), MovieAdapter.OnClickedListener {
     private fun setupUIs() {
         viewModel.checkInternet()
         binding.rvNowPlaying.apply {
-            layoutManager = GridLayoutManager(requireContext(),2)
+            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = movieAdapter.withLoadStateHeaderAndFooter(
                 header = MovieLoadStateAdapter { movieAdapter.retry() },
                 footer = MovieLoadStateAdapter { movieAdapter.retry() }
@@ -78,8 +79,8 @@ class NowPlayingFragment : Fragment(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.movieLiveData.observe(viewLifecycleOwner, ::moviesHandler)
         viewModel.addFavoriteStatusLiveData.observe(viewLifecycleOwner, ::addFavStatusHandler)
+        viewModel.genresLiveData.observe(viewLifecycleOwner, ::genresHandler)
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, ::noInternetHandler)
     }
 
@@ -95,7 +96,22 @@ class NowPlayingFragment : Fragment(), MovieAdapter.OnClickedListener {
                 binding.root.showToast("Added to Favorites", Toast.LENGTH_SHORT)
             }
             Status.ERROR -> {
-                showDataView(true)
+                showDataView(false)
+                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
+            }
+        }
+    }
+
+    private fun genresHandler(resource: Resource<List<GenresItem>>) {
+        when (resource.status) {
+            Status.LOADING -> showLoadingView()
+            Status.SUCCESS -> resource.data?.let {
+                showDataView(resource.data.isNotEmpty())
+                movieAdapter.setGenres(resource.data)
+                viewModel.movieLiveData.observe(viewLifecycleOwner, ::moviesHandler)
+            }
+            Status.ERROR -> {
+                showDataView(false)
                 resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
             }
         }

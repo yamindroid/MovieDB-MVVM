@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.data.Resource
 import com.ymo.data.Status
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
 import com.ymo.databinding.FragmentTopRatedBinding
 import com.ymo.ui.MovieAdapter
@@ -78,9 +79,9 @@ class TopRatedFragment : Fragment(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.movieLiveData.observe(viewLifecycleOwner, ::moviesHandler)
         viewModel.addFavoriteStatusLiveData.observe(viewLifecycleOwner, ::addFavStatusHandler)
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, ::noInternetHandler)
+        viewModel.genresLiveData.observe(viewLifecycleOwner, ::genresHandler)
     }
 
     private fun noInternetHandler(noInternet: String) {
@@ -96,6 +97,20 @@ class TopRatedFragment : Fragment(), MovieAdapter.OnClickedListener {
             }
             Status.ERROR -> {
                 showDataView(true)
+                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
+            }
+        }
+    }
+    private fun genresHandler(resource: Resource<List<GenresItem>>) {
+        when (resource.status) {
+            Status.LOADING -> showLoadingView()
+            Status.SUCCESS -> resource.data?.let {
+                showDataView(resource.data.isNotEmpty())
+                movieAdapter.setGenres(resource.data)
+                viewModel.movieLiveData.observe(this, ::moviesHandler)
+            }
+            Status.ERROR -> {
+                showDataView(false)
                 resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
             }
         }

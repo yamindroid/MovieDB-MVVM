@@ -1,5 +1,7 @@
 package com.ymo.data.remote
 
+import com.ymo.data.model.api.GenreResponse
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieDetail
 import com.ymo.data.model.api.MovieResponse
 import retrofit2.http.GET
@@ -12,4 +14,5 @@ interface ApiHelper {
     suspend fun loadUpComingMovies(page: Int): MovieResponse
     suspend fun loadMovieDetails(movieId: Int): MovieDetail
     suspend fun searchMoviesByQuery(query: String, page: Int): MovieResponse
+    suspend fun loadGenres(): GenreResponse
 }

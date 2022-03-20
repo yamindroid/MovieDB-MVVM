@@ -2,6 +2,7 @@ package com.ymo.ui.component.popular
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ymo.data.Resource
 import com.ymo.data.Status
+import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
 import com.ymo.databinding.FragmentPopularBinding
 import com.ymo.ui.MovieAdapter
@@ -78,8 +80,8 @@ class PopularFragment : Fragment(), MovieAdapter.OnClickedListener {
     }
 
     private fun setupObservers() {
-        viewModel.movieLiveData.observe(viewLifecycleOwner, ::moviesHandler)
         viewModel.addFavoriteStatusLiveData.observe(viewLifecycleOwner, ::addFavStatusHandler)
+        viewModel.genresLiveData.observe(viewLifecycleOwner, ::genresHandler)
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, ::noInternetHandler)
     }
 
@@ -103,6 +105,21 @@ class PopularFragment : Fragment(), MovieAdapter.OnClickedListener {
 
     private fun moviesHandler(resource: PagingData<MovieItem>) {
         movieAdapter.submitData(lifecycle, resource)
+    }
+
+    private fun genresHandler(resource: Resource<List<GenresItem>>) {
+        when (resource.status) {
+            Status.LOADING -> showLoadingView()
+            Status.SUCCESS -> resource.data?.let {
+                showDataView(resource.data.isNotEmpty())
+                movieAdapter.setGenres(resource.data)
+                viewModel.movieLiveData.observe(viewLifecycleOwner, ::moviesHandler)
+            }
+            Status.ERROR -> {
+                showDataView(false)
+                resource.errorMessage?.let { binding.root.showSnackbar(it, Snackbar.LENGTH_LONG) }
+            }
+        }
     }
 
     override fun onPosterClicked(movieItem: MovieItem) {
