@@ -1,19 +1,15 @@
 package com.ymo.ui.component.favorites
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ymo.R
-import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.db.FavoriteMovie
+import com.ymo.databinding.MovieCardBinding
 import com.ymo.utils.getLocalTimeFromUnix
-import com.ymo.utils.inflate
 import com.ymo.utils.loadFromUrl
-import kotlinx.android.synthetic.main.activity_movie_detail.view.*
-import kotlinx.android.synthetic.main.movie_card.view.*
-import kotlinx.android.synthetic.main.movie_card.view.iv_poster
 
 class FavoriteMoviesAdapter(
     private val listener: OnClickedListener
@@ -37,7 +33,7 @@ class FavoriteMoviesAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
-        return FavoriteViewHolder(parent.inflate(R.layout.movie_card))
+        return FavoriteViewHolder(MovieCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
@@ -50,12 +46,12 @@ class FavoriteMoviesAdapter(
     }
 }
 
-class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class FavoriteViewHolder(private val binding: MovieCardBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
         favoriteMovie: FavoriteMovie,
         listener: FavoriteMoviesAdapter.OnClickedListener
     ) {
-        with(itemView)
+        with(binding)
         {
 
             val url = "https://image.tmdb.org/t/p/original/" + favoriteMovie.posterPath
@@ -65,17 +61,17 @@ class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             genres =
                 if (genres.length > 0) genres.substring(0, genres.length - 1) else ""
-            tv_genre.text = genres
-            iv_poster.loadFromUrl(url)
-            tv_title.text = favoriteMovie.title
-            tv_vote.text = resources.getString(R.string.votes_ui, favoriteMovie.voteCount)
-            tv_vote_average.text = favoriteMovie.voteAverage.toString()
-            tv_date.text =
+            tvGenre.text = genres
+            ivPoster.loadFromUrl(url)
+            tvTitle.text = favoriteMovie.title
+            tvVote.text = tvVote.context.getString(R.string.votes_ui, favoriteMovie.voteCount)
+            tvVoteAverage.text = favoriteMovie.voteAverage.toString()
+            tvDate.text =
                 if (favoriteMovie.releaseDate?.isEmpty() == true) "00/00/0000" else favoriteMovie.releaseDate?.let {
                     getLocalTimeFromUnix(it)
                 }
 
-            setOnClickListener {
+            root.setOnClickListener {
                 listener.onPosterClicked(favoriteMovie)
             }
         }

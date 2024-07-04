@@ -1,6 +1,6 @@
 package com.ymo.ui
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ymo.R
 import com.ymo.data.model.api.GenresItem
 import com.ymo.data.model.api.MovieItem
+import com.ymo.databinding.MovieCardBinding
 import com.ymo.utils.getLocalTimeFromUnix
-import com.ymo.utils.inflate
 import com.ymo.utils.loadFromUrl
-import kotlinx.android.synthetic.main.movie_card.view.*
 
 private const val TAG = "MovieAdapter"
 
@@ -20,7 +19,7 @@ class MovieAdapter(
 ) : PagingDataAdapter<MovieItem, MovieAdapter.MovieViewHolder>(MovieModelComparator) {
     private var genres: List<GenresItem>? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return MovieViewHolder(parent.inflate(R.layout.movie_card))
+        return MovieViewHolder(MovieCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     fun setGenres(genres: List<GenresItem>) {
@@ -35,19 +34,19 @@ class MovieAdapter(
         fun onPosterClicked(movieItem: MovieItem)
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MovieViewHolder(val binding: MovieCardBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             movieItem: MovieItem,
             listener: OnClickedListener
         ) {
-            with(itemView)
+            with(binding)
             {
                 val url = "https://image.tmdb.org/t/p/original/" + movieItem.posterPath
                 var genreName = ""
-                iv_poster.loadFromUrl(url)
-                tv_title.text = movieItem.title
-                tv_vote.text = resources.getString(R.string.votes_ui, movieItem.voteCount)
-                tv_vote_average.text = movieItem.voteAverage.toString()
+                ivPoster.loadFromUrl(url)
+                tvTitle.text = movieItem.title
+                tvVote.text = tvVote.context.getString(R.string.votes_ui, movieItem.voteCount)
+                tvVoteAverage.text = movieItem.voteAverage.toString()
                 val generesById: Map<Int?, GenresItem>? = genres?.associateBy { it.id }
                 movieItem.genreIds?.filter { generesById?.get(it) != null }
                     ?.map { genreId ->
@@ -57,13 +56,13 @@ class MovieAdapter(
                     }
                 genreName =
                     if (genreName.length > 0) genreName.substring(0, genreName.length - 1) else ""
-                tv_genre.text = genreName
-                tv_date.text =
+                tvGenre.text = genreName
+                tvDate.text =
                     if (movieItem.releaseDate?.isEmpty() == true) "00/00/0000" else movieItem.releaseDate?.let {
                         getLocalTimeFromUnix(it)
                     }
 
-                setOnClickListener {
+                root.setOnClickListener {
                     listener.onPosterClicked(movieItem)
                 }
             }

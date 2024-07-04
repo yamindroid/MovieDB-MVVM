@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'kotlin-platform-android'
     id 'dagger.hilt.android.plugin'
@@ -14,6 +13,7 @@ kapt {
 android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
+    namespace 'com.ymo'
     defaultConfig {
         applicationId 'com.ymo'
         minSdkVersion rootProject.minSdkVersion
@@ -24,7 +24,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
-        viewBinding = true
+        viewBinding true
+        buildConfig true
     }
     buildTypes {
         release {
@@ -41,11 +42,11 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_17
     }
 }
 
